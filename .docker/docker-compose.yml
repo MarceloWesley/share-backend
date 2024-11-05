@@ -11,4 +11,6 @@ services:
       - '5432:5432'
     shm_size: 128mb
     environment:
-      POSTGRES_PASSWORD: root
+      POSTGRES_DB: sharedb
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
