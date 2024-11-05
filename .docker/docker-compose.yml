@@ -1,0 +1,14 @@
+version: '3.9'
+
+name: share-db
+
+services:
+  db:
+    container_name: db-postgres
+    image: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: root
