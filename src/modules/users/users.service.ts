@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  GoneException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -44,23 +45,47 @@ export class UsersService {
         email,
       },
     });
-    console.log(data);
+
     if (data) throw new ConflictException('Email already exists');
   }
 
+  public async consumeInvite(code: string) {
+    const user = (await this.findOneByCode(code)).data;
+
+    if (user.remaining_invites === 0) {
+      throw new GoneException('Invalid code');
+    }
+
+    const currentInvites = user.remaining_invites - 1;
+
+    const userDecreasedInvite: UpdateOneUserByIdDTO = {
+      ...user,
+      remaining_invites: currentInvites,
+    };
+
+    await this.updateOneById(user.id, userDecreasedInvite);
+  }
+
   public async createOne(dto: CreateUserDTO) {
-    const { name, email, password } = dto;
+    const { name, email, password, registered_code } = dto;
+    let registeredCode = null;
 
     await this.verifyEmailExistence(email);
+
+    if (registered_code) {
+      registeredCode = registered_code;
+      await this.consumeInvite(registeredCode);
+    }
 
     const hashedPassword = await this.hashPassword(password);
     const code = await this.createInviteCode();
 
-    const response = await this.prismaService.user.create({
+    const data = await this.prismaService.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
+        registered_code: registeredCode,
         invite_code: code,
         remaining_invites: 5,
       },
@@ -68,7 +93,7 @@ export class UsersService {
     });
 
     return {
-      response,
+      data,
     };
   }
 
@@ -114,6 +139,31 @@ export class UsersService {
     const data = await this.prismaService.user.findUnique({
       where: { email },
       select: prismaExclude('User', ['password']),
+    });
+
+    if (!data) throw new NotFoundException('The user was not found.');
+
+    return {
+      data,
+    };
+  }
+
+  public async findOneByCode(code: string) {
+    const data = await this.prismaService.user.findUnique({
+      where: { invite_code: code },
+      select: prismaExclude('User', ['password']),
+    });
+
+    if (!data) throw new NotFoundException('Invite code not found');
+
+    return {
+      data,
+    };
+  }
+
+  public async findOneByEmailWithPassword(email: string) {
+    const data = await this.prismaService.user.findUnique({
+      where: { email },
     });
 
     if (!data) throw new NotFoundException('The user was not found.');

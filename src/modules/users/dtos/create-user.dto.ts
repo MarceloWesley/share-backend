@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 import { UserDTO } from './user.dto';
 import { IntersectionType, PickType } from '@nestjs/swagger';
@@ -7,12 +7,14 @@ class DefaultCreatedCustomerDTO extends PickType(UserDTO, [
   'name',
   'email',
   'password',
+  'registered_code',
 ] as const) {}
 
 class NewCreateCustomerDTO extends PickType(UserDTO, [
   'name',
   'email',
   'password',
+  'registered_code',
 ] as const) {
   @IsNotEmpty()
   public readonly name: string;
@@ -22,6 +24,9 @@ class NewCreateCustomerDTO extends PickType(UserDTO, [
 
   @IsNotEmpty()
   public readonly password: string;
+
+  @IsOptional()
+  public readonly registered_code: string;
 }
 
 export class CreateUserDTO extends IntersectionType(

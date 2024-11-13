@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNumber,
+  IsOptional,
   IsString,
   IsStrongPassword,
   MaxLength,
@@ -47,5 +48,15 @@ export class UserDTO extends CommonFields {
     example: 'CHJKR8',
   })
   @IsString()
+  @MaxLength(6)
   public readonly invite_code: string;
+
+  @ApiProperty({
+    description: 'Promotion code for registering new users',
+    example: 'CHJKR8',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  public readonly registered_code: string | null;
 }
