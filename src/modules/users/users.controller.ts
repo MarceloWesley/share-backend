@@ -8,8 +8,14 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   CreateUserDTO,
   FindOneUserByEmailDTO,
@@ -27,13 +33,16 @@ import {
 } from './responses';
 import {
   ConflictResponseDTO,
+  GoneResponseDTO,
   InvalidEntriesResponseDTO,
   RecordNotFoundDTO,
   UnauthorizedResponseDTO,
 } from 'src/shared/responses';
+import { AuthGuard } from 'src/shared/guards';
 
-@Controller('users')
+@ApiBearerAuth()
 @ApiTags('Users')
+@Controller('users')
 export class UsersController {
   public constructor(private readonly usersService: UsersService) {}
 
@@ -61,6 +70,17 @@ export class UsersController {
     description: 'Invalid entries response object',
     type: InvalidEntriesResponseDTO,
   })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Record not found users response object',
+    type: RecordNotFoundDTO,
+  })
+  @ApiResponse({
+    status: HttpStatus.GONE,
+    description: 'Invalid code response object',
+    type: GoneResponseDTO,
+  })
+  @UseGuards(AuthGuard)
   @Post()
   public async createOne(@Body() createUserDTO: CreateUserDTO) {
     return await this.usersService.createOne(createUserDTO);
@@ -80,6 +100,7 @@ export class UsersController {
     description: 'Unauthorized users response object',
     type: UnauthorizedResponseDTO,
   })
+  @UseGuards(AuthGuard)
   @Get()
   public async findAll(@Query() pagination: PaginationOptionsDTO) {
     return await this.usersService.findAll({ pagination });
@@ -109,6 +130,7 @@ export class UsersController {
     description: 'Invalid entries response object',
     type: InvalidEntriesResponseDTO,
   })
+  @UseGuards(AuthGuard)
   @Get(':id')
   public async findOneById(@Param() { id }: FindOneUserByIdDTO) {
     return await this.usersService.findOneById(id);
@@ -138,6 +160,7 @@ export class UsersController {
     description: 'Invalid entries response object',
     type: InvalidEntriesResponseDTO,
   })
+  @UseGuards(AuthGuard)
   @Get('email/:email')
   public async findOneByEmail(@Param() { email }: FindOneUserByEmailDTO) {
     return await this.usersService.findOneByEmail(email);
@@ -172,6 +195,7 @@ export class UsersController {
     description: 'Invalid entries response object',
     type: InvalidEntriesResponseDTO,
   })
+  @UseGuards(AuthGuard)
   @Patch(':id')
   public async updateOneById(
     @Param() { id }: FindOneUserByIdDTO,
@@ -199,6 +223,7 @@ export class UsersController {
     description: 'Record not found users response object',
     type: RecordNotFoundDTO,
   })
+  @UseGuards(AuthGuard)
   @Delete(':id')
   public async deleteOneById(@Param() { id }: FindOneUserByIdDTO) {
     return await this.usersService.deleteOne(id);
