@@ -14,10 +14,10 @@ model User {
   password          String
   remaining_invites Int
   invite_code       String    @unique
-  registered_code   String?
   createdAt         DateTime  @default(now())
   deletedAt         DateTime?
   updatedAt         DateTime  @updatedAt
+  invited_by        Int?
 }
 
 model Config {
