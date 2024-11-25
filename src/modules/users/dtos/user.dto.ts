@@ -52,11 +52,11 @@ export class UserDTO extends CommonFields {
   public readonly invite_code: string;
 
   @ApiProperty({
-    description: 'Promotion code for registering new users',
-    example: 'CHJKR8',
+    description: 'Registration code sender',
+    example: 12,
     nullable: true,
   })
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  public readonly registered_code: string | null;
+  public readonly invited_by: number | null;
 }

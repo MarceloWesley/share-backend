@@ -7,14 +7,12 @@ class DefaultCreatedCustomerDTO extends PickType(UserDTO, [
   'name',
   'email',
   'password',
-  'registered_code',
 ] as const) {}
 
 class NewCreateCustomerDTO extends PickType(UserDTO, [
   'name',
   'email',
   'password',
-  'registered_code',
 ] as const) {
   @IsNotEmpty()
   public readonly name: string;

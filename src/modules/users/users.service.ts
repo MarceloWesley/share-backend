@@ -68,11 +68,13 @@ export class UsersService {
 
   public async createOne(dto: CreateUserDTO) {
     const { name, email, password, registered_code } = dto;
-    let registeredCode = null;
+    let registeredCode: string = null;
+    let senderId: number = null;
 
     await this.verifyEmailExistence(email);
 
     if (registered_code) {
+      senderId = (await this.findOneByCode(registered_code)).data.id;
       registeredCode = registered_code;
       await this.consumeInvite(registeredCode);
     }
@@ -85,7 +87,7 @@ export class UsersService {
         name,
         email,
         password: hashedPassword,
-        registered_code: registeredCode,
+        invited_by: senderId,
         invite_code: code,
         remaining_invites: 5,
       },
