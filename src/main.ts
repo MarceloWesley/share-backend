@@ -11,8 +11,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get<ConfigService>(ConfigService);
   const serverPort = configService.getOrThrow('SERVER_PORT');
-  const TITLE = 'Project - Alexandria';
-  const DESCRIPTION = 'The main API of "Alexandria"';
+  const TITLE = 'Project - Share';
+  const DESCRIPTION = 'The main API of "Share"';
   const API_VERSION = '1.0';
 
   const config = new DocumentBuilder()

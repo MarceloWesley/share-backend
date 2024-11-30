@@ -1,5 +1,5 @@
 import { CommonFields } from '@/shared/dtos';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNumber,
@@ -10,7 +10,12 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class UserDTO extends CommonFields {
+export class LoggedUserDTOFixture extends PickType(CommonFields, [
+  'createdAt',
+  'deletedAt',
+  'updatedAt',
+  'id',
+] as const) {
   @ApiProperty({
     description: 'Username',
     example: 'John Doe',
@@ -26,15 +31,15 @@ export class UserDTO extends CommonFields {
   @IsEmail()
   public readonly email: string;
 
-  @ApiProperty({
-    description: 'User password',
-    example: 'Example123*',
-  })
-  @IsString()
-  @MinLength(6)
-  @MaxLength(512)
-  @IsStrongPassword()
-  public readonly password: string;
+  // @ApiProperty({
+  //   description: 'User password',
+  //   example: 'Example123*',
+  // })
+  // @IsString()
+  // @MinLength(6)
+  // @MaxLength(512)
+  // @IsStrongPassword()
+  // public readonly password: string;
 
   @ApiProperty({
     description: 'User remaining invites',

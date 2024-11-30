@@ -1,5 +1,5 @@
+import { LoginStub } from '@/stubs/login';
 import { ApiProperty } from '@nestjs/swagger';
-import { LoginStub } from 'src/stubs/login';
 
 export class LoginResponseDTO {
   @ApiProperty({

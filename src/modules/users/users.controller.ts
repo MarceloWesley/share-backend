@@ -16,14 +16,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import {
-  CreateUserDTO,
-  FindOneUserByEmailDTO,
-  UpdateOneUserByIdDTO,
-} from './dtos';
+
 import { UsersService } from './users.service';
-import { PaginationOptionsDTO } from 'src/shared/dtos/pagination';
-import { FindOneUserByIdDTO } from './dtos/find-one-user-by-id.dto';
+import { AuthGuard } from '@/shared/guards';
+
 import {
   CreatedOneUserResponseDTO,
   DeletedOneUserResponseDTO,
@@ -31,14 +27,22 @@ import {
   FoundOneUserResponseDTO,
   UpdatedOneUserResponseDTO,
 } from './responses';
+
 import {
   ConflictResponseDTO,
   GoneResponseDTO,
   InvalidEntriesResponseDTO,
   RecordNotFoundDTO,
   UnauthorizedResponseDTO,
-} from 'src/shared/responses';
-import { AuthGuard } from 'src/shared/guards';
+} from '@/shared/responses';
+
+import { PaginationOptionsDTO } from '@/shared/dtos';
+import { FindOneUserByIdDTO } from './dtos/find-one-user-by-id.dto';
+import {
+  CreateUserDTO,
+  FindOneUserByEmailDTO,
+  UpdateOneUserByIdDTO,
+} from './dtos';
 
 @ApiBearerAuth()
 @ApiTags('Users')
