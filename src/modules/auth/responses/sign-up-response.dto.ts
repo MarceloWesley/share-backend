@@ -1,5 +1,5 @@
+import { UserStub } from '@/stubs/user';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserStub } from 'src/stubs/user';
 
 export class SignUpCustomerResponseDTO {
   @ApiProperty({

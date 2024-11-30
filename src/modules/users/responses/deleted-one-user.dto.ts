@@ -1,5 +1,5 @@
+import { UserStubWithDeletedAt } from '@/stubs/user';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserStubWithDeletedAt } from 'src/stubs/user';
 
 export class DeletedOneUserResponseDTO {
   @ApiProperty({

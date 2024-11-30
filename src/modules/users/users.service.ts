@@ -4,13 +4,15 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/shared/prisma';
+
+import { PrismaService } from '@/shared/prisma';
+
 import { CreateUserDTO, UpdateOneUserByIdDTO } from './dtos';
 
 import * as bcrypt from 'bcrypt';
-import { PaginationDTO, PaginationMetaDTO } from 'src/shared/dtos/pagination';
-import { CommonFilter } from 'src/shared/types';
-import { prismaExclude } from 'src/utils/prisma';
+import { prismaExclude } from '@/utils/prisma';
+import { CommonFilter } from '@/shared/types';
+import { PaginationDTO, PaginationMetaDTO } from '@/shared/dtos';
 
 @Injectable()
 export class UsersService {

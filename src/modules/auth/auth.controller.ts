@@ -13,7 +13,7 @@ import {
   GoneResponseDTO,
   InvalidEntriesResponseDTO,
   RecordNotFoundDTO,
-} from 'src/shared/responses';
+} from '@/shared/responses';
 
 @ApiTags('Auth')
 @Controller('auth')
