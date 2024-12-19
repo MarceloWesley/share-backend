@@ -11,10 +11,14 @@ import * as bcrypt from 'bcrypt';
 import { PaginationDTO, PaginationMetaDTO } from 'src/shared/dtos/pagination';
 import { CommonFilter } from 'src/shared/types';
 import { prismaExclude } from 'src/utils/prisma';
+import { TotalInvitesConfigService } from '../total-invites-config/total-invites-config.service';
 
 @Injectable()
 export class UsersService {
-  public constructor(private readonly prismaService: PrismaService) {}
+  public constructor(
+    private readonly prismaService: PrismaService,
+    private readonly totalInvitesConfigService: TotalInvitesConfigService,
+  ) {}
 
   private async hashPassword(password: string) {
     const rounds = 10;
@@ -37,6 +41,15 @@ export class UsersService {
     const code = result + randomNumber;
 
     return code;
+  }
+
+  private async getTotalInvites() {
+    const data = (await this.totalInvitesConfigService.findAll()).data;
+    const totalInvites = data[0].total_invites;
+
+    if (!totalInvites) throw new Error('Total invites not found');
+
+    return totalInvites;
   }
 
   public async verifyEmailExistence(email: string) {
@@ -81,22 +94,27 @@ export class UsersService {
 
     const hashedPassword = await this.hashPassword(password);
     const code = await this.createInviteCode();
+    const remaining_invites = await this.getTotalInvites();
 
-    const data = await this.prismaService.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        invited_by: senderId,
-        invite_code: code,
-        remaining_invites: 5,
-      },
-      select: prismaExclude('User', ['password']),
-    });
+    try {
+      const data = await this.prismaService.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+          invited_by: senderId,
+          invite_code: code,
+          remaining_invites,
+        },
+        select: prismaExclude('User', ['password']),
+      });
 
-    return {
-      data,
-    };
+      return {
+        data,
+      };
+    } catch (err) {
+      console.log(`Error when creating user: ${err}`);
+    }
   }
 
   public async findAll({ pagination: { page = 1, size = 5 } }: CommonFilter) {
