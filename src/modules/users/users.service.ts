@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   GoneException,
   Injectable,
@@ -113,7 +114,9 @@ export class UsersService {
         data,
       };
     } catch (err) {
-      console.log(`Error when creating user: ${err}`);
+      throw new BadRequestException(
+        'User could not be created. Please try again later.',
+      );
     }
   }
 
