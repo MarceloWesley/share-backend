@@ -24,7 +24,21 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The Share backend application is a server-side solution built with the powerful NestJS framework. It facilitates the creation of user accounts, enabling users to invite friends using unique invitation codes. These codes unlock potential benefits such as exclusive promotions and rewards for both the inviter and the invitee.
+
+ ## Features
+
+- Account Management: Create and manage user accounts with secure password handling.
+
+- Invitation System: Each user receives a unique invite code to share with friends.
+
+- Benefits and Rewards: Users gain advantages when their invitees register using their code.
+
+- Scalable Architecture: Built with NestJS for high performance and maintainability.
+
+## Objective
+
+My goal with this project was to gain a deeper understanding of authentication in NestJS. I wanted to explore best practices and techniques for building secure authentication and authorization systems, and to enhance my knowledge on integrating various authentication methods like JWT. This project allowed me to learn more about managing security in back-end applications with NestJS in a hands-on, practical way.
 
 ## Installation
 
@@ -45,18 +59,6 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## Support
 
