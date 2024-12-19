@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  name              String
+  email             String    @unique
+  password          String
+  remaining_invites Int
+  invite_code       String    @unique
+  createdAt         DateTime  @default(now())
+  deletedAt         DateTime?
+  updatedAt         DateTime  @updatedAt
+  invited_by        Int?
+}
+
+model Config {
+  id            Int       @id @default(autoincrement())
+  total_invites Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+}
